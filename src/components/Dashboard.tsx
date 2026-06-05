@@ -4,13 +4,14 @@ import { getCategoryIcon } from '../lib/icons';
 
 interface DashboardProps {
   categories: Category[];
-  categoryStats: Record<string, { total: number; mastered: number }>;
+  categoryStats: Record<string, { total: number; mastered: number; dueCards: number }>;
   onSelectCategory: (categoryId: string) => void;
 }
 
 export function Dashboard({ categories, categoryStats, onSelectCategory }: DashboardProps) {
   const totalCards = Object.values(categoryStats).reduce((sum, s) => sum + s.total, 0);
   const totalMastered = Object.values(categoryStats).reduce((sum, s) => sum + s.mastered, 0);
+  const totalDue = Object.values(categoryStats).reduce((sum, s) => sum + s.dueCards, 0);
   const totalProgress = totalCards === 0 ? 0 : Math.round((totalMastered / totalCards) * 100);
 
   return (
@@ -20,16 +21,16 @@ export function Dashboard({ categories, categoryStats, onSelectCategory }: Dashb
         <h1 className="text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100 mb-2">
           Elinika
         </h1>
-        <p className="text-zinc-500 mb-6">Yunanca Öğrenme Kartları</p>
+        <p className="text-zinc-500 mb-6">Akıllı Tekrar Sistemi (SM-2)</p>
         
         <div className="bg-zinc-900 dark:bg-zinc-100 rounded-3xl p-6 text-white dark:text-zinc-900 flex items-center justify-between">
            <div>
-             <span className="block text-sm font-medium opacity-80 mb-1">Genel İlerleme</span>
-             <div className="text-4xl font-light">{totalProgress}%</div>
+             <span className="block text-sm font-medium opacity-80 mb-1">Bekleyen Tekrar</span>
+             <div className="text-4xl font-light">{totalDue}</div>
            </div>
            <div className="text-right">
-             <span className="block text-sm font-medium opacity-80 mb-1">Öğrenilen Kartlar</span>
-             <div className="text-xl font-medium">{totalMastered} <span className="opacity-60 text-sm">/ {totalCards}</span></div>
+             <span className="block text-sm font-medium opacity-80 mb-1">Öğrenilen</span>
+             <div className="text-xl font-medium">%{totalProgress} <span className="opacity-60 text-sm">/ {totalMastered}</span></div>
            </div>
         </div>
       </header>
@@ -40,7 +41,7 @@ export function Dashboard({ categories, categoryStats, onSelectCategory }: Dashb
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {categories.map((cat, index) => {
-            const stats = categoryStats[cat.id] || { total: 0, mastered: 0 };
+            const stats = categoryStats[cat.id] || { total: 0, mastered: 0, dueCards: 0 };
             const progress = stats.total === 0 ? 0 : (stats.mastered / stats.total) * 100;
             const Icon = getCategoryIcon(cat.iconName);
             
@@ -54,11 +55,14 @@ export function Dashboard({ categories, categoryStats, onSelectCategory }: Dashb
                 className="w-full text-left bg-white dark:bg-zinc-900 p-5 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow active:scale-[0.98]"
               >
                 <div className="flex items-start justify-between mb-4">
-                   <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-2xl">
+                   <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-2xl relative">
                      <Icon className="w-6 h-6 text-zinc-700 dark:text-zinc-300" />
+                     {stats.dueCards > 0 && (
+                       <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-zinc-900" />
+                     )}
                    </div>
-                   <div className="text-xs font-medium text-zinc-400 bg-zinc-50 dark:bg-zinc-800 px-2 py-1 rounded-full">
-                     {stats.mastered}/{stats.total}
+                   <div className="text-xs font-medium text-zinc-400 bg-zinc-50 dark:bg-zinc-800 px-2 py-1 rounded-full whitespace-nowrap overflow-hidden text-ellipsis">
+                     {stats.dueCards > 0 ? `${stats.dueCards} Tekrar` : (stats.mastered > 0 ? 'Tamam' : 'Başla')}
                    </div>
                 </div>
                 

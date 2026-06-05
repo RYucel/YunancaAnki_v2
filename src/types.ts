@@ -15,6 +15,14 @@ export interface Category {
 
 export type CardKnowledgeStatus = 'new' | 'learning' | 'mastered';
 
+export interface CardProgress {
+  status: CardKnowledgeStatus;
+  interval: number;
+  repetition: number;
+  efactor: number;
+  dueDate: number; // Unix timestamp
+}
+
 export interface UserProgress {
-  [cardId: string]: CardKnowledgeStatus;
+  [cardId: string]: CardProgress | string; // Use union to support backward comp
 }
