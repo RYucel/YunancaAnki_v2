@@ -21,5 +21,10 @@ export const categories: Category[] = [
   { id: 'mekanlar', title: 'Şehir ve Mekanlar', description: 'Binalar, dükkanlar ve kamusal alanlar', iconName: 'Building' },
   { id: 'teknoloji', title: 'İletişim', description: 'Teknoloji, internet ve iletişim', iconName: 'Smartphone' },
   { id: 'duygular', title: 'Duygular', description: 'Hisler ve fiziksel durumlar', iconName: 'Smile' },
-  { id: 'giyim', title: 'Giyim', description: 'Kıyafetler ve aksesuarlar', iconName: 'Shirt' }
+  { id: 'giyim', title: 'Giyim', description: 'Kıyafetler ve aksesuarlar', iconName: 'Shirt' },
+  { id: 'seyahat', title: 'Seyahat ve Tatil', description: 'Seyahat terimleri ve tatil', iconName: 'Plane' },
+  { id: 'hayvanlar', title: 'Hayvanlar', description: 'Evcil ve vahşi hayvanlar', iconName: 'Cat' },
+  { id: 'spor', title: 'Spor ve Hobiler', description: 'Spor dalları ve boş zaman aktiviteleri', iconName: 'Dumbbell' },
+  { id: 'okul', title: 'Eğitim ve Okul', description: 'Okul eşyaları ve eğitim terimleri', iconName: 'GraduationCap' },
+  { id: 'saglik', title: 'Sağlık', description: 'Hastane, ilaçlar ve sağlık durumu', iconName: 'Cross' }
 ];

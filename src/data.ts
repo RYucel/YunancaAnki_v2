@@ -9,6 +9,9 @@ import { extraVerbs } from './data/set_verbs2';
 import { adjectives } from './data/set_adjectives';
 import { advanced } from './data/set_advanced';
 import { phrases } from './data/set_phrases';
+import { expansion1 } from './data/set_expansion_1';
+import { expansion2 } from './data/set_expansion_2';
+import { expansion3 } from './data/set_expansion_3';
 import { Flashcard } from './types';
 
 export { categories };
@@ -23,5 +26,8 @@ export const flashcards: Flashcard[] = [
   ...extraVerbs,
   ...adjectives,
   ...advanced,
-  ...phrases
+  ...phrases,
+  ...expansion1,
+  ...expansion2,
+  ...expansion3
 ];
