@@ -2,11 +2,35 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
   return {
     base: './', // GitHub Pages için göreceli yollar
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(), 
+      tailwindcss(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: ['icon.svg'],
+        manifest: {
+          name: 'Yunanca Anki',
+          short_name: 'Yunanca',
+          description: 'Yunanca Kelime Öğrenme Uygulaması',
+          theme_color: '#ffffff',
+          background_color: '#ffffff',
+          display: 'standalone',
+          icons: [
+            {
+              src: 'icon.svg',
+              sizes: '512x512',
+              type: 'image/svg+xml',
+              purpose: 'any maskable'
+            }
+          ]
+        }
+      })
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
