@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FlashcardView } from './FlashcardView';
 import { Flashcard } from '../types';
@@ -18,10 +18,14 @@ export function StudySession({ cards, onComplete, onRecordReview, onBack }: Stud
   
   // Local queue allows appending failed cards to the end of the batch
   const [queue, setQueue] = useState<Flashcard[]>(cards);
+  
+  // Stats tracking
+  const [reviewedCards, setReviewedCards] = useState<Set<string>>(new Set());
+  const [masteredCards, setMasteredCards] = useState<Set<string>>(new Set());
 
   const currentCard = queue[currentIndex];
   
-  if (queue.length === 0) {
+  if (cards.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center space-y-6">
          <motion.div 
@@ -50,42 +54,84 @@ export function StudySession({ cards, onComplete, onRecordReview, onBack }: Stud
   const isFinished = currentIndex >= queue.length;
 
   const handleNext = (quality: number) => {
+    if (!currentCard) return;
+
     onRecordReview(currentCard.id, quality);
     setDirection(quality >= 3 ? 1 : -1);
     setIsFlipped(false);
     
+    setReviewedCards(prev => new Set(prev).add(currentCard.id));
+    if (quality >= 3) {
+      setMasteredCards(prev => new Set(prev).add(currentCard.id));
+    } else {
+      setMasteredCards(prev => {
+        const next = new Set(prev);
+        next.delete(currentCard.id);
+        return next;
+      });
+    }
+
     // If quality is poor (Tekrar et), push it back into the queue for today.
     if (quality < 3) {
       setQueue(prev => [...prev, currentCard]);
     }
     
-    if (currentIndex + 1 >= queue.length && quality >= 3) {
-      // Small timeout to allow transition exit
-      setTimeout(() => onComplete(), 500);
-    }
     setCurrentIndex(prev => prev + 1);
   };
 
   if (isFinished) {
-    return null;
+    return (
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 max-w-lg mx-auto w-full"
+      >
+        <div className="w-24 h-24 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4">
+          <Check className="w-12 h-12" />
+        </div>
+        
+        <div className="text-center space-y-2">
+          <h2 className="text-3xl font-medium tracking-tight text-zinc-900 dark:text-white">Çalışma Tamamlandı!</h2>
+          <p className="text-zinc-500">Bu oturumdaki performansın</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 w-full max-w-sm mt-8">
+          <div className="bg-white dark:bg-zinc-800 rounded-3xl p-6 text-center shadow-sm border border-zinc-100 dark:border-zinc-700/50">
+            <div className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-white mb-2">{reviewedCards.size}</div>
+            <div className="text-xs uppercase tracking-wider text-zinc-500 font-medium">İncelenen Kart</div>
+          </div>
+          <div className="bg-white dark:bg-zinc-800 rounded-3xl p-6 text-center shadow-sm border border-zinc-100 dark:border-zinc-700/50">
+            <div className="text-4xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400 mb-2">{masteredCards.size}</div>
+            <div className="text-xs uppercase tracking-wider text-zinc-500 font-medium">Öğrenilen</div>
+          </div>
+        </div>
+
+        <button 
+          onClick={onComplete}
+          className="mt-12 px-8 py-3.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-full font-medium active:scale-95 transition-all outline-none hover:bg-zinc-800 dark:hover:bg-zinc-200"
+        >
+          Ana Ekrana Dön
+        </button>
+      </motion.div>
+    );
   }
 
   return (
     <div className="w-full flex-1 flex flex-col overflow-hidden max-w-lg mx-auto">
       {/* Top Bar */}
       <div className="flex items-center justify-between p-4 mb-4">
-        <button onClick={onBack} className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+        <button onClick={onBack} className="p-2 rounded-full z-10 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
           <ArrowLeft className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
         </button>
-        <div className="flex-1 px-8">
-           <div className="h-1.5 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+        <div className="absolute left-0 right-0 px-20">
+           <div className="h-1.5 w-full max-w-[200px] mx-auto bg-zinc-200/50 dark:bg-zinc-800 rounded-full overflow-hidden">
              <div 
                className="h-full bg-zinc-900 dark:bg-zinc-100 transition-all duration-300 ease-out rounded-full"
                style={{ width: `${(currentIndex / queue.length) * 100}%` }}
              />
            </div>
         </div>
-        <div className="text-sm font-medium text-zinc-400 whitespace-nowrap">
+        <div className="text-sm font-medium z-10 text-zinc-400 whitespace-nowrap">
            {currentIndex + 1} / {queue.length}
         </div>
       </div>

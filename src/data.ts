@@ -5,6 +5,10 @@ import { life } from './data/set_life';
 import { environment } from './data/set_environment';
 import { grammar } from './data/set_grammar';
 import { misc } from './data/set_misc';
+import { extraVerbs } from './data/set_verbs2';
+import { adjectives } from './data/set_adjectives';
+import { advanced } from './data/set_advanced';
+import { phrases } from './data/set_phrases';
 import { Flashcard } from './types';
 
 export { categories };
@@ -15,5 +19,9 @@ export const flashcards: Flashcard[] = [
   ...life,
   ...environment,
   ...grammar,
-  ...misc
+  ...misc,
+  ...extraVerbs,
+  ...adjectives,
+  ...advanced,
+  ...phrases
 ];

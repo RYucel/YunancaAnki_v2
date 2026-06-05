@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Category } from '../types';
 import { getCategoryIcon } from '../lib/icons';
+import { ThemeToggle } from './ThemeToggle';
 
 interface DashboardProps {
   categories: Category[];
@@ -18,9 +19,12 @@ export function Dashboard({ categories, categoryStats, onSelectCategory }: Dashb
     <div className="w-full max-w-2xl mx-auto px-4 py-8">
       {/* Header & Global Stats */}
       <header className="mb-10">
-        <h1 className="text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100 mb-2">
-          Elinika
-        </h1>
+        <div className="flex items-start justify-between mb-2">
+          <h1 className="text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100">
+            Elinika
+          </h1>
+          <ThemeToggle />
+        </div>
         <p className="text-zinc-500 mb-6">Akıllı Tekrar Sistemi (SM-2)</p>
         
         <div className="bg-zinc-900 dark:bg-zinc-100 rounded-3xl p-6 text-white dark:text-zinc-900 flex items-center justify-between">

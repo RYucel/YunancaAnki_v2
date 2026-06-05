@@ -21,5 +21,5 @@ export const categories: Category[] = [
   { id: 'mekanlar', title: 'Şehir ve Mekanlar', description: 'Binalar, dükkanlar ve kamusal alanlar', iconName: 'Building' },
   { id: 'teknoloji', title: 'İletişim', description: 'Teknoloji, internet ve iletişim', iconName: 'Smartphone' },
   { id: 'duygular', title: 'Duygular', description: 'Hisler ve fiziksel durumlar', iconName: 'Smile' },
-  { id: 'giyim', title: 'Giyim', description: 'Kıyafetler ve aksesuarlar', iconName: 'Shirt' },
+  { id: 'giyim', title: 'Giyim', description: 'Kıyafetler ve aksesuarlar', iconName: 'Shirt' }
 ];
