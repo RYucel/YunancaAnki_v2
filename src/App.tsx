@@ -6,6 +6,7 @@
 import { useState, useMemo } from 'react';
 import { Dashboard } from './components/Dashboard';
 import { StudySession } from './components/StudySession';
+import { InstallPrompt } from './components/InstallPrompt';
 import { useProgress } from './store';
 import { categories, flashcards } from './data';
 import { AnimatePresence, motion } from 'motion/react';
@@ -69,6 +70,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-[#0a0a0a] text-zinc-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-zinc-200 dark:selection:bg-zinc-800 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] px-[env(safe-area-inset-left)]">
+      <InstallPrompt />
       <AnimatePresence mode="wait">
         {!activeCategoryId ? (
           <motion.div
